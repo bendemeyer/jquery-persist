@@ -72,23 +72,17 @@
 					if (active) {
 						//get the loweset element in the tree targeted by the event
 						var elem = e.target;
-						//check if that element fits the selector, and is a child of the object that originally called the method
-						//if so, run the handler and pass it the event object
-						if ($(elem).is(select) && $this.find(elem)) {
-							handler(e);
-						}
-						//if not, check each successive parent element to see if it matches the selector, while still being a child of the original object
-						//if it is, run the handler and break out of the loop
-						//if it's not a child of the original element, or if we reach the top of the document tree without matching the selector,
-						//	exit the loop withour running the handler
-						else {
-							while (elem = elem.parentElement && $this.find(elem)) {
-								if ($(elem).is(select)) {
-									handler(e);
-									break;
-								}
+						//check if that element fits the selector
+						//if it does, run the handler and break out of the loop/
+						do {
+							if ($(elem).is(select)) {
+								handler(e);
+								break;
 							}
 						}
+						//if the element doesn't fit the selector, take it's parent element
+						//unless it has no parent or its parent is not a child of the original jQuery object,
+						while (elem = elem.parentElement && $this.find(elem).length);
 					}
 				}
 			}
